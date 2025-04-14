@@ -1,6 +1,5 @@
 #include "lua.h"
 #include "lauxlib.h"
-#include "llimits.h"
 
 #include <Windows.h>
 #include <io.h>
@@ -15,9 +14,9 @@ typedef luaL_Stream LStream;
 
 static FILE* rlua_checkFILEp(lua_State* L, int arg) {
     LStream* p = rlua_checkLStream(L, arg);
-    if (luai_unlikely(isclosed(p)))
+    if (isclosed(p))
         luaL_error(L, "attempt to use a closed file");
-    lua_assert(p->f);
+    assert(p->f);
     return p->f;
 }
 
