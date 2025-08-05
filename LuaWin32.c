@@ -18,7 +18,7 @@ static void set_info(lua_State* L)
     lua_setfield(L, -2, "_COPYRIGHT");
     lua_pushliteral(L, "LuaRadWin32 is a Lua library developed to access the Win32 set of functions");
     lua_setfield(L, -2, "_DESCRIPTION");
-    lua_pushliteral(L, "1.0");
+    lua_pushliteral(L, "1.1");
     lua_setfield(L, -2, "_VERSION");
 }
 
