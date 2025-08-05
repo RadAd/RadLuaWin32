@@ -126,6 +126,18 @@ static int l_FindNextFile(lua_State* L)
     return lua_gettop(L) - rt;
 }
 
+static int l_GetACP(lua_State* L)
+{
+    int arg = 0;
+    luaL_checktype(L, arg + 1, LUA_TNONE);
+
+    const UINT cp = GetACP();
+
+    const int rt = lua_gettop(L);
+    rlua_pushUINT(L, cp);
+    return lua_gettop(L) - rt;
+}
+
 static int l_GetConsoleAliases(lua_State* L)
 {
     int arg = 0;
@@ -171,6 +183,30 @@ static int l_GetConsoleAliasesLength(lua_State* L)
 
     lua_pushinteger(L, GetConsoleAliasesLength((char*) lpExeName));
 
+    return lua_gettop(L) - rt;
+}
+
+static int l_GetConsoleCP(lua_State* L)
+{
+    int arg = 0;
+    luaL_checktype(L, arg + 1, LUA_TNONE);
+
+    const UINT cp = GetConsoleCP();
+
+    const int rt = lua_gettop(L);
+    rlua_pushUINT(L, cp);
+    return lua_gettop(L) - rt;
+}
+
+static int l_GetConsoleOutputCP(lua_State* L)
+{
+    int arg = 0;
+    luaL_checktype(L, arg + 1, LUA_TNONE);
+
+    const UINT cp = GetConsoleOutputCP();
+
+    const int rt = lua_gettop(L);
+    rlua_pushUINT(L, cp);
     return lua_gettop(L) - rt;
 }
 
@@ -263,6 +299,18 @@ static int l_GetLastError(lua_State* L)
 
     const int rt = lua_gettop(L);
     rlua_pushDWORD(L, e);
+    return lua_gettop(L) - rt;
+}
+
+static int l_GetOEMCP(lua_State* L)
+{
+    int arg = 0;
+    luaL_checktype(L, arg + 1, LUA_TNONE);
+
+    const UINT cp = GetOEMCP();
+
+    const int rt = lua_gettop(L);
+    rlua_pushUINT(L, cp);
     return lua_gettop(L) - rt;
 }
 
@@ -383,6 +431,32 @@ static int l_ReadFile(lua_State* L)
     return lua_gettop(L) - rt;
 }
 
+static int l_SetConsoleCP(lua_State* L)
+{
+    int arg = 0;
+    const UINT cp = rlua_checkUINT(L, ++arg);
+    luaL_checktype(L, arg + 1, LUA_TNONE);
+
+    const BOOL ret = SetConsoleCP(cp);
+
+    const int rt = lua_gettop(L);
+    rlua_pushBOOL(L, ret);
+    return lua_gettop(L) - rt;
+}
+
+static int l_SetConsoleOutputCP(lua_State* L)
+{
+    int arg = 0;
+    const UINT cp = rlua_checkUINT(L, ++arg);
+    luaL_checktype(L, arg + 1, LUA_TNONE);
+
+    const BOOL ret = SetConsoleOutputCP(cp);
+
+    const int rt = lua_gettop(L);
+    rlua_pushBOOL(L, ret);
+    return lua_gettop(L) - rt;
+}
+
 static int l_SetEnvironmentVariable(lua_State* L)
 {
     int arg = 0;
@@ -451,19 +525,25 @@ extern const struct luaL_Reg kernel32lib[] = {
   { "FindClose", l_FindClose },
   { "FindFirstFile", l_FindFirstFile },
   { "FindNextFile", l_FindNextFile },
+  { "GetACP", l_GetACP },
   { "GetConsoleAliases", l_GetConsoleAliases },
   { "GetConsoleAliasesLength", l_GetConsoleAliasesLength },
+  { "GetConsoleCP", l_GetConsoleCP },
+  { "GetConsoleOutputCP", l_GetConsoleOutputCP },
   { "GetCurrentDirectory", l_GetCurrentDirectory},
   { "GetCurrentProcess", l_GetCurrentProcess },
   { "GetEnvironmentStrings", l_GetEnvironmentStrings },
   { "GetEnvironmentVariable", l_GetEnvironmentVariable },
   { "GetLastError", l_GetLastError },
+  { "GetOEMCP", l_GetOEMCP },
   { "GetProcessId", l_GetProcessId },
   { "GetStdHandle", l_GetStdHandle },
   { "GetTickCount", l_GetTickCount },
   { "OutputDebugString", l_OutputDebugString },
   { "ReadConsole", l_ReadConsole },
   { "ReadFile", l_ReadFile },
+  { "SetConsoleCP", l_SetConsoleCP },
+  { "SetConsoleOutputCP", l_SetConsoleOutputCP },
   { "SetEnvironmentVariable", l_SetEnvironmentVariable },
   { "Sleep", l_Sleep },
   { "WriteConsole", l_WriteConsole },
