@@ -35,9 +35,12 @@ inline void rlua_setfield##type(lua_State* L, int idx, const char* k, type v) \
 
 REGISTER_CHECK_INTEGER(int)
 REGISTER_CHECK_INTEGER(UINT)
+REGISTER_CHECK_INTEGER(SHORT)
+REGISTER_CHECK_INTEGER(USHORT)
 REGISTER_CHECK_INTEGER(LONG)
 REGISTER_CHECK_INTEGER(ULONG)
 REGISTER_CHECK_INTEGER(LONG_PTR)
+REGISTER_CHECK_INTEGER(WORD)
 REGISTER_CHECK_INTEGER(DWORD)
 REGISTER_CHECK_INTEGER(WPARAM)
 REGISTER_CHECK_INTEGER(LPARAM)
@@ -204,6 +207,46 @@ static void rlua_toPOINT(lua_State* L, int idx, POINT* pt)
 
 REGISTER_CHECK_STRUCT(POINT)
 
+// COORD
+
+inline void rlua_fromCOORD(lua_State* L, int idx, const COORD* pt)
+{
+    luaL_checktype(L, idx, LUA_TTABLE);
+    REGISTER_SET_FIELD(SHORT, pt, X);
+    REGISTER_SET_FIELD(SHORT, pt, Y);
+}
+
+static void rlua_toCOORD(lua_State* L, int idx, COORD* pt)
+{
+    luaL_checktype(L, idx, LUA_TTABLE);
+    REGISTER_GET_FIELD(SHORT, pt, X);
+    REGISTER_GET_FIELD(SHORT, pt, Y);
+}
+
+REGISTER_CHECK_STRUCT(COORD)
+
+// SMALL_RECT
+
+inline void rlua_fromSMALL_RECT(lua_State* L, int idx, const SMALL_RECT* rc)
+{
+    luaL_checktype(L, idx, LUA_TTABLE);
+    REGISTER_SET_FIELD(SHORT, rc, Left);
+    REGISTER_SET_FIELD(SHORT, rc, Top);
+    REGISTER_SET_FIELD(SHORT, rc, Bottom);
+    REGISTER_SET_FIELD(SHORT, rc, Right);
+}
+
+static void rlua_toSMALL_RECT(lua_State* L, int idx, SMALL_RECT* rc)
+{
+    luaL_checktype(L, idx, LUA_TTABLE);
+    REGISTER_GET_FIELD(SHORT, rc, Left);
+    REGISTER_GET_FIELD(SHORT, rc, Top);
+    REGISTER_GET_FIELD(SHORT, rc, Bottom);
+    REGISTER_GET_FIELD(SHORT, rc, Right);
+}
+
+REGISTER_CHECK_STRUCT(SMALL_RECT)
+
 // FILETIME
 
 inline void rlua_fromFILETIME(lua_State* L, int idx, const FILETIME* ft)
@@ -266,6 +309,18 @@ inline void rlua_fromWIN32_FIND_DATA(lua_State* L, int idx, const WIN32_FIND_DAT
 }
 
 //REGISTER_CHECK_STRUCT(WIN32_FIND_DATA)
+
+// CONSOLE_SCREEN_BUFFER_INFO
+
+inline void rlua_fromCONSOLE_SCREEN_BUFFER_INFO(lua_State* L, int idx, const CONSOLE_SCREEN_BUFFER_INFO* csbi)
+{
+    luaL_checktype(L, idx, LUA_TTABLE);
+    REGISTER_SET_FIELD(COORD, csbi, dwSize);
+    REGISTER_SET_FIELD(COORD, csbi, dwCursorPosition);
+    REGISTER_SET_FIELD(WORD, csbi, wAttributes);
+    REGISTER_SET_FIELD(SMALL_RECT, csbi, srWindow);
+    REGISTER_SET_FIELD(COORD, csbi, dwMaximumWindowSize);
+}
 
 // SECURITY_ATTRIBUTES
 

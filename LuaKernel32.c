@@ -210,6 +210,24 @@ static int l_GetConsoleOutputCP(lua_State* L)
     return lua_gettop(L) - rt;
 }
 
+static int l_GetConsoleScreenBufferInfo(lua_State* L)
+{
+    int arg = 0;
+    const HANDLE h = rlua_checkHANDLE(L, ++arg);
+    const int BufferInfoidx = ++arg;
+    luaL_checktype(L, arg + 1, LUA_TNONE);
+
+    CONSOLE_SCREEN_BUFFER_INFO csbi;
+    ZeroMemory(&csbi, sizeof(csbi));
+    const BOOL ret = GetConsoleScreenBufferInfo(h, &csbi);
+
+    rlua_fromCONSOLE_SCREEN_BUFFER_INFO(L, BufferInfoidx, &csbi);
+
+    const int rt = lua_gettop(L);
+    rlua_pushBOOL(L, ret);
+    return lua_gettop(L) - rt;
+}
+
 static int l_GetCurrentDirectory(lua_State* L)
 {
     int arg = 0;
@@ -530,6 +548,7 @@ extern const struct luaL_Reg kernel32lib[] = {
   { "GetConsoleAliasesLength", l_GetConsoleAliasesLength },
   { "GetConsoleCP", l_GetConsoleCP },
   { "GetConsoleOutputCP", l_GetConsoleOutputCP },
+  { "GetConsoleScreenBufferInfo", l_GetConsoleScreenBufferInfo },
   { "GetCurrentDirectory", l_GetCurrentDirectory},
   { "GetCurrentProcess", l_GetCurrentProcess },
   { "GetEnvironmentStrings", l_GetEnvironmentStrings },
